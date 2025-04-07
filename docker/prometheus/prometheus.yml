@@ -1,0 +1,34 @@
+global:
+  scrape_interval:     2s  #gets metrics every 2secs from the actuator
+  evaluation_interval: 2s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+        labels:
+          application: 'PROMETHEUS Application'
+  - job_name: 'product_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['desktop-kl8bkbn.mshome.net:8080'] ##using host.docker.internal because prometheus will be calling from inside the docker container to our localhost. Used for demo purposes, if for production you will use the name of the product service container. Don't use host.docker.internal in production
+        labels:
+          application: 'Product Service Application'
+  - job_name: 'order_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'host.docker.internal:8081' ] ##using host.docker.internal because prometheus will be calling from inside the docker container to our localhost. Used for demo purposes, if for production you will use the name of the product service container. Don't use host.docker.internal in production
+        labels:
+          application: 'Order Application'
+  - job_name: 'inventory_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'host.docker.internal:8082' ] ##using host.docker.internal because prometheus will be calling from inside the docker container to our localhost. Used for demo purposes, if for production you will use the name of the product service container. Don't use host.docker.internal in production
+        labels:
+          application: 'Inventory Application'
+  - job_name: 'notification_service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'desktop-kl8bkbn.mshome.net:8087' ] ##using host.docker.internal because prometheus will be calling from inside the docker container to our localhost. Used for demo purposes, if for production you will use the name of the product service container. Don't use host.docker.internal in production
+        labels:
+          application: 'Notify Application'
